@@ -1,0 +1,44 @@
+version: '3.9'  
+services:
+  palworld-dedicated-server:
+    image: jammsen/palworld-dedicated-server:latest
+    container_name: palworld-dedicated-server 
+    restart: always
+    network_mode: bridge
+    ports:
+      - target: 8211 # gamerserver port inside of the container
+        published: 8211 # gamerserver port on your host
+        protocol: udp
+        mode: host
+      - target: 25575 # rcon port inside of the container
+        published: 25575 # rcon port on your host
+        protocol: tcp
+        mode: host
+    environment:
+      - TIMEZONE=Asia/Shanghai
+      - ALWAYS_UPDATE_ON_START=true
+      - MAX_PLAYERS=32
+      - MULTITHREAD_ENABLED=true
+      - RCON_ENABLED=true
+      - PUBLIC_PORT=8211
+      - ADMIN_PASSWORD=admin123
+      - BACKUP_ENABLED=true
+      - BACKUP_CRON_EXPRESSION=*/30 * * * *
+      - COMMUNITY_SERVER=false
+      - SERVER_NAME=Palworld Private Server-###RANDOM###
+      - SERVER_DESCRIPTION=Palworld Private Server
+      - SERVER_PASSWORD=
+      
+      
+    volumes:
+      - ./game:/palworld
+    
+    # fix bug
+    deploy:
+      resources:
+        limits:
+          memory: 10G
+  rcon:
+    image: outdead/rcon:latest
+    entrypoint: ['/rcon', '-a', '192.168.1.66:25575', '-p', 'admin123']
+    profiles: ['rcon']
