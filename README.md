@@ -9,7 +9,7 @@ palword game server - Docker
 
 ```
 # 拉取代码
-git clone https://github.com/.git
+git clone https://github.com/Rockyzsu/palworld_game_local_deploy.git
 
 
 # 进入项目文件夹，创建game目录，并修改权限
